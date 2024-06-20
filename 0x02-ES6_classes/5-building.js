@@ -1,10 +1,10 @@
 export default class Building {
-  constructor(sqrt) {
-    this._sqrt = sqrt;
+  constructor(sqft) {
+    this._sqrt = sqft;
   }
 
   get sqrt() {
-    return this._sqrt;
+    return this._sqft;
   }
 
   evacuationWarningMessage() {
