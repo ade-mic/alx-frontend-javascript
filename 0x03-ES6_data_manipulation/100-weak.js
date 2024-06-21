@@ -1,6 +1,6 @@
 export const weakMap = new WeakMap();
 
-// initialize the query count for each endpoint 
+// initialize the query count for each endpoint
 weakMap.set({ endpoint: 0 });
 
 export function queryAPI(endPoint) {
@@ -9,6 +9,6 @@ export function queryAPI(endPoint) {
 
   //   check if the count exceeds the threshold of 5
   if (currentCount >= 5) {
-    throw new Error('EndPoint load is high');
+    throw new Error('Endpoint load is high');
   }
 }
