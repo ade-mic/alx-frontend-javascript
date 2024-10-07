@@ -10,22 +10,19 @@ export default function handleProfileSignup(firstName, lastName, fileName) {
 
   // Use Promise.allSettled to handle both resolved and rejected promises
   return Promise.allSettled([signUpPromise, uploadPromise])
-    .then((results) => {
-      // Map the results into the desired structure
-      return results.map((result) => {
-        if (result.status !== 'fulfilled') {
-          // If somehow the promise is pending,
-          // return nothing for value (though Promise.allSettled doesn't return pending)
-          return {
-            status: result.status,
-            value: undefined,
-          };
-        }
-        // For settled promises, return status and value or reason
+    .then((results) => results.map((result) => {
+      if (result.status !== 'fulfilled') {
+        // If somehow the promise is pending,
+        // return nothing for value (though Promise.allSettled doesn't return pending)
         return {
           status: result.status,
-          value: result.status === 'fulfilled' ? result.value : result.reason,
+          value: undefined,
         };
-      });
-    });
+      }
+      // For settled promises, return status and value or reason
+      return {
+        status: result.status,
+        value: result.value,
+      };
+    }));
 }
