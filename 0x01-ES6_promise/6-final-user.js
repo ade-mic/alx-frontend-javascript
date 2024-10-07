@@ -1,13 +1,31 @@
+// Import the necessary functions
 import signUpUser from './4-user-promise';
 import uploadPhoto from './5-photo-reject';
 
-async function handleProfileSignup(firstName, lastName, fileName) {
-  const userResult = await signUpUser(firstName, lastName);
-  // const photoResult = await uploadPhoto(fileName);
+// Define and export the handleProfileSignup function
+export default function handleProfileSignup(firstName, lastName, fileName) {
+  // Call the two functions and pass the appropriate arguments
+  const signUpPromise = signUpUser(firstName, lastName);
+  const uploadPromise = uploadPhoto(fileName);
 
-  return [
-    { status: userResult.status, value: userResult.value },
-  ];
+  // Use Promise.allSettled to handle both resolved and rejected promises
+  return Promise.allSettled([signUpPromise, uploadPromise])
+    .then((results) => {
+      // Map the results into the desired structure
+      return results.map((result) => {
+        if (result.status !== 'fulfilled') {
+          // If somehow the promise is pending,
+          // return nothing for value (though Promise.allSettled doesn't return pending)
+          return {
+            status: result.status,
+            value: undefined,
+          };
+        }
+        // For settled promises, return status and value or reason
+        return {
+          status: result.status,
+          value: result.status === 'fulfilled' ? result.value : result.reason,
+        };
+      });
+    });
 }
-
-export default handleProfileSignup;
