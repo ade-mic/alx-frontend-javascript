@@ -11,7 +11,7 @@ export default function handleProfileSignup(firstName, lastName, fileName) {
   // Use Promise.allSettled to handle both resolved and rejected promises
   return Promise.allSettled([signUpPromise, uploadPromise])
     .then((results) => results.map((result) => {
-      if (result.status !== 'fulfilled') {
+      if (result.status === 'pending') {
         // If somehow the promise is pending,
         // return nothing for value (though Promise.allSettled doesn't return pending)
         return {
